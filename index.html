@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Programming 2 - Week 2 Screenshots</title>
+  <style>
+    /* ============================================= */
+    /* CSS Reset and Base Styles                     */
+    /* ============================================= */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background-color: #0d1117;
+      color: #e6edf3;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ============================================= */
+    /* Header                                        */
+    /* ============================================= */
+    .header {
+      background: linear-gradient(135deg, #161b22 0%, #1a1f2b 100%);
+      border-bottom: 1px solid #30363d;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .header .subtitle {
+      font-size: 1.1rem;
+      color: #8b949e;
+      font-weight: 400;
+    }
+
+    .header .badge {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.35rem 1rem;
+      background-color: #238636;
+      color: #ffffff;
+      border-radius: 2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    /* ============================================= */
+    /* Main Content Container                        */
+    /* ============================================= */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* ============================================= */
+    /* Section Title                                 */
+    /* ============================================= */
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #30363d;
+    }
+
+    /* ============================================= */
+    /* Screenshot Grid                               */
+    /* ============================================= */
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* ============================================= */
+    /* Screenshot Card                               */
+    /* ============================================= */
+    .screenshot-card {
+      background-color: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    .screenshot-card:hover {
+      border-color: #58a6ff;
+      transform: translateY(-2px);
+    }
+
+    /* Card header with number and description */
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #30363d;
+    }
+
+    .card-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #238636;
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #e6edf3;
+    }
+
+    .card-description {
+      font-size: 0.8rem;
+      color: #8b949e;
+      margin-top: 0.15rem;
+    }
+
+    /* Card image wrapper */
+    .card-image {
+      padding: 0.75rem;
+      background-color: #0d1117;
+    }
+
+    .card-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+      border: 1px solid #21262d;
+    }
+
+    /* ============================================= */
+    /* Lightbox Overlay                              */
+    /* ============================================= */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background-color: rgba(0, 0, 0, 0.85);
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      cursor: zoom-out;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+      cursor: default;
+    }
+
+    /* Lightbox close button */
+    .lightbox-close {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      color: #e6edf3;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 1001;
+      line-height: 1;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+
+    .lightbox-close:hover {
+      opacity: 1;
+    }
+
+    /* Lightbox navigation arrows */
+    .lightbox-nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #e6edf3;
+      font-size: 1.5rem;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1001;
+      transition: background 0.2s ease;
+    }
+
+    .lightbox-nav:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .lightbox-prev {
+      left: 1.5rem;
+    }
+
+    .lightbox-next {
+      right: 1.5rem;
+    }
+
+    /* Lightbox caption */
+    .lightbox-caption {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #e6edf3;
+      font-size: 0.95rem;
+      font-weight: 600;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 0.5rem 1.25rem;
+      border-radius: 2rem;
+      z-index: 1001;
+      white-space: nowrap;
+    }
+
+    /* ============================================= */
+    /* Footer                                        */
+    /* ============================================= */
+    .footer {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      border-top: 1px solid #30363d;
+      color: #8b949e;
+      font-size: 0.85rem;
+    }
+
+    .footer a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ============================================= */
+    /* Responsive - Stacks to single column on small */
+    /* ============================================= */
+    @media (max-width: 560px) {
+      .screenshot-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 1.5rem;
+      }
+
+      .lightbox-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================== -->
+  <!-- Header Section                              -->
+  <!-- =========================================== -->
+  <header class="header">
+    <h1>Web Programming 2</h1>
+    <p class="subtitle">PHP Student Grading System &mdash; Screenshot Documentation</p>
+    <span class="badge">Week 2</span>
+  </header>
+
+  <!-- =========================================== -->
+  <!-- Main Content                                -->
+  <!-- =========================================== -->
+  <main class="container">
+    <h2 class="section-title">Week 2 Screenshots</h2>
+
+    <!-- Screenshot grid populated by JavaScript -->
+    <div class="screenshot-grid" id="screenshotGrid"></div>
+  </main>
+
+  <!-- =========================================== -->
+  <!-- Lightbox Overlay                            -->
+  <!-- =========================================== -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">&#8249;</button>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">&#8250;</button>
+    <img id="lightboxImg" src="" alt="">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+
+  <!-- =========================================== -->
+  <!-- Footer                                      -->
+  <!-- =========================================== -->
+  <footer class="footer">
+    <p>Web Programming 2 &mdash; Week 2 &mdash; <a href="https://github.com/Martinezworldwide/PHPScreenshots" target="_blank" rel="noopener">View Repository on GitHub</a></p>
+  </footer>
+
+  <script>
+    // =============================================
+    // Screenshot Data Array
+    // Each object contains the image path, title,
+    // and description for a single screenshot.
+    // =============================================
+    const screenshots = [
+      {
+        src: "assets/screenshot-1-grading-form.png",
+        title: "Student Grading Form",
+        description: "Exam scores and subject marks input form with values filled in"
+      },
+      {
+        src: "assets/screenshot-2-results-pass.png",
+        title: "Grading Results — Pass",
+        description: "Results showing 91.67% average, Pass with Honor Roll and Academic Probation"
+      },
+      {
+        src: "assets/screenshot-3-results-fail.png",
+        title: "Grading Results — Fail",
+        description: "Results showing 40% average with a Fail outcome"
+      },
+      {
+        src: "assets/screenshot-4-students-generator.png",
+        title: "5 Students Results Generator",
+        description: "Batch results for 5 students all showing Pass at 90%"
+      }
+    ];
+
+    // =============================================
+    // DOM Element References
+    // =============================================
+    const gridEl = document.getElementById("screenshotGrid");
+    const lightboxEl = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightboxImg");
+    const lightboxCaption = document.getElementById("lightboxCaption");
+    const lightboxClose = document.getElementById("lightboxClose");
+    const lightboxPrev = document.getElementById("lightboxPrev");
+    const lightboxNext = document.getElementById("lightboxNext");
+
+    // Tracks which screenshot is currently open in the lightbox
+    let currentIndex = 0;
+
+    // =============================================
+    // Render Screenshot Cards into the Grid
+    // =============================================
+    function renderScreenshots() {
+      screenshots.forEach(function (shot, index) {
+        // Create card container
+        var card = document.createElement("div");
+        card.className = "screenshot-card";
+        card.setAttribute("data-index", index);
+
+        // Build card inner HTML with number badge, title, description, and image
+        card.innerHTML =
+          '<div class="card-header">' +
+            '<span class="card-number">' + (index + 1) + '</span>' +
+            '<div>' +
+              '<div class="card-title">' + shot.title + '</div>' +
+              '<div class="card-description">' + shot.description + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="card-image">' +
+            '<img src="' + shot.src + '" alt="' + shot.title + '" loading="lazy">' +
+          '</div>';
+
+        // Open lightbox on card click
+        card.addEventListener("click", function () {
+          openLightbox(index);
+        });
+
+        gridEl.appendChild(card);
+      });
+    }
+
+    // =============================================
+    // Lightbox Functions
+    // =============================================
+
+    // Opens the lightbox and displays the screenshot at the given index
+    function openLightbox(index) {
+      currentIndex = index;
+      updateLightboxImage();
+      lightboxEl.classList.add("active");
+      // Prevent background scrolling while lightbox is open
+      document.body.style.overflow = "hidden";
+    }
+
+    // Closes the lightbox overlay
+    function closeLightbox() {
+      lightboxEl.classList.remove("active");
+      // Restore background scrolling
+      document.body.style.overflow = "";
+    }
+
+    // Updates the lightbox image and caption to match currentIndex
+    function updateLightboxImage() {
+      var shot = screenshots[currentIndex];
+      lightboxImg.src = shot.src;
+      lightboxImg.alt = shot.title;
+      lightboxCaption.textContent = (currentIndex + 1) + " / " + screenshots.length + " — " + shot.title;
+    }
+
+    // Navigate to the previous screenshot in the lightbox
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + screenshots.length) % screenshots.length;
+      updateLightboxImage();
+    }
+
+    // Navigate to the next screenshot in the lightbox
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % screenshots.length;
+      updateLightboxImage();
+    }
+
+    // =============================================
+    // Event Listeners
+    // =============================================
+
+    // Close lightbox when close button is clicked
+    lightboxClose.addEventListener("click", function (e) {
+      e.stopPropagation();
+      closeLightbox();
+    });
+
+    // Navigate to previous image
+    lightboxPrev.addEventListener("click", function (e) {
+      e.stopPropagation();
+      prevImage();
+    });
+
+    // Navigate to next image
+    lightboxNext.addEventListener("click", function (e) {
+      e.stopPropagation();
+      nextImage();
+    });
+
+    // Close lightbox when clicking the dark backdrop (not the image itself)
+    lightboxEl.addEventListener("click", function (e) {
+      if (e.target === lightboxEl) {
+        closeLightbox();
+      }
+    });
+
+    // Keyboard navigation: Escape to close, ArrowLeft/Right to navigate
+    document.addEventListener("keydown", function (e) {
+      if (!lightboxEl.classList.contains("active")) return;
+
+      if (e.key === "Escape") {
+        closeLightbox();
+      } else if (e.key === "ArrowLeft") {
+        prevImage();
+      } else if (e.key === "ArrowRight") {
+        nextImage();
+      }
+    });
+
+    // =============================================
+    // Initialize the page on load
+    // =============================================
+    renderScreenshots();
+  </script>
+</body>
+</html>
